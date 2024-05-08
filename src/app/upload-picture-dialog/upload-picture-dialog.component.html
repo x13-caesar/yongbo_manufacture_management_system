@@ -1,0 +1,24 @@
+<h2 mat-dialog-title> {{data.key}} - {{data.display_name}} </h2>
+<div mat-dialog-content>
+  <div fxLayout="column" fxLayoutAlign="start center" >
+    <p class="mat-h3 subtitle">参考图片</p>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="start center" >
+    <button id="loadFileXml" class="vertical-isolated" (click)="fileUploadInput.nativeElement.click();">选择文件</button>
+    <p class="vertical-isolated info">已选择文件：{{fileToUpload ? fileToUpload.name : '无'}}</p>
+    <input type="file"
+           class="file-input"
+           id="file"
+           style="display:none;"
+           (change)="handleFileInput($event)" #fileUpload>
+    <button class="action upload-btn" [disabled]="!fileToUpload" (click)="onClickUploadPicture()">确认上传</button>
+    <div *ngIf="uploadStatus==='uploading'; else uploadResultTemplate"><mat-spinner></mat-spinner></div>
+    <ng-template #uploadResultTemplate>
+      <mat-icon color="primary" *ngIf="uploadStatus==='success'">done</mat-icon>
+      <mat-icon color="warning" *ngIf="uploadStatus==='fail'">error</mat-icon>
+    </ng-template>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button (click)="dialogRef.close()">结束</button>
+</div>

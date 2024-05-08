@@ -1,0 +1,32 @@
+<div class="body-container" fxLayout="column" fxLayoutAlign="space-between center">
+  <div class="nav-track" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10">
+    <p class="sub-header">当前页：</p>
+    <p class="highlight sub-header alternative">入库（采购单视图）</p>
+    <button class="button-nav" routerLink="/instock-item">前往 #追踪（配件视图）</button>
+  </div>
+  <div class="button-container"><hr class="solid"></div>
+  <div class="button-container" fxLayout="row" fxLayoutAlign="start center">
+    <button class="call" routerLink="/new-instock-form">创建新采购单</button>
+    <button class="button-nav" routerLink="/historical-instock-form">历史采购单</button>
+    <button class="button-format" (click)="autoSizeAll(false)">自动列宽</button>
+    <button class="action" routerLink="/company-info">编辑开票信息</button>
+  </div>
+  <ag-grid-angular
+    style="width: 100%; height: 80%"
+    class="ag-theme-material"
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+    (firstDataRendered)="autoSizeAll(false)"
+    [columnDefs]="ColumnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowSelection]="'multiple'"
+    [animateRows]="true"
+    [localeText]="localeText"
+    [rowGroupPanelShow]="'always'"
+    [rowClassRules]="rowClassRules"
+    (cellValueChanged)="onCellValueChanged($event)"
+  >
+  </ag-grid-angular>
+</div>
+
+

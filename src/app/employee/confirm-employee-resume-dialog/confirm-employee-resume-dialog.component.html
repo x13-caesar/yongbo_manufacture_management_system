@@ -1,0 +1,8 @@
+<h2 mat-dialog-title> 确认恢复员工为在职状态 </h2>
+<mat-dialog-content class="mat-typography">
+  <p class="warn">员工 {{data.employee.name}}（工号 {{data.employee.id}}）将被设为在职状态，重新显示在员工表格中？</p>
+</mat-dialog-content>
+<mat-dialog-content>
+  <button mat-raised-button color="warn" (click)="bringEmployeeBack(data.employee)"> 确认 </button>
+  <button mat-stroked-button (click)="dialogRef.close()">退出</button>
+</mat-dialog-content>

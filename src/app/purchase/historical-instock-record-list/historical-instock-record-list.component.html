@@ -1,0 +1,44 @@
+<div class="body-container"  fxLayout="column" fxLayoutAlign="space-between center">
+  <div class="nav-track" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10">
+    <p class="sub-header">当前页：</p>
+    <p class="highlight sub-header">历史入库记录</p>
+  </div>
+  <div class="button-container"><hr class="solid"></div>
+  <div class="button-container" fxLayout="row" fxLayoutAlign="start center">
+    <button class="button-nav" routerLink="/historical-instock-form">历史采购单</button>
+    <button class="action" (click)="onBtnExport()">导出Excel</button>
+    <button class="button-format" (click)="autoSizeAll(false)">自动列宽</button>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <form class="button-container" fxLayout="row" fxLayoutAlign="start center">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <label for="start-date">从</label>
+        <input id="start-date" type="date" [(ngModel)]="start">
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <label for="end-date">到</label>
+        <input id="end-date" type="date" [(ngModel)]="end">
+      </div>
+      <button class="next" (click)="updateGridData()">查询</button>
+    </form>
+  </div>
+
+  <ag-grid-angular
+    style="width: 100%; height: 80%"
+    class="ag-theme-material"
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+    (firstDataRendered)="autoSizeAll(false)"
+    [columnDefs]="ColumnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowSelection]="'multiple'"
+    [animateRows]="true"
+    [localeText]="localeText"
+    [rowGroupPanelShow]="'always'"
+    [alwaysShowHorizontalScroll]="true"
+    [alwaysShowVerticalScroll]="true"
+  >
+  </ag-grid-angular>
+</div>
+
+

@@ -1,0 +1,8 @@
+<h2 mat-dialog-title> 确认员工离职 </h2>
+<mat-dialog-content class="mat-typography">
+  <p class="warn">员工 {{data.employee.name}}（工号 {{data.employee.id}}）将被设为离职状态，此后不再显示在员工表格中？</p>
+</mat-dialog-content>
+<mat-dialog-content>
+  <button mat-raised-button color="warn" (click)="letEmpGo(data.employee)"> 确认 </button>
+  <button mat-stroked-button (click)="dialogRef.close()">退出</button>
+</mat-dialog-content>

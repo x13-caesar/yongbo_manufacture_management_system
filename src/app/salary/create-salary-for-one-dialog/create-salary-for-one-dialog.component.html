@@ -1,0 +1,96 @@
+<div mat-dialog-title>
+  <p class="mat-h2">个人结算</p>
+</div>
+
+<div mat-dialog-content class="body-container" fxLayout="row" fxLayoutAlign="space-between start">
+  <div class="ety-percent-fill" fxFlex="40" style="padding-left: 20px">
+    <p class="subtitle mat-h3">【结算范围】</p>
+    <form [formGroup]="salaryGroup" fxLayout="column" fxLayoutAlign="space-around start">
+      <mat-form-field appearance="outline" style="width: 200px">
+        <mat-label>员工</mat-label>
+        <input type="text" matInput formControlName="employee" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="employeeService.employeeDisplayFn">
+          <mat-option *ngFor="let emp of this.employeeOptions | async" [value]="emp">
+            {{emp.name}} | {{emp.id}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="width: 200px">
+        <mat-label>结算日期范围</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate formControlName="start_date" placeholder="开始日期">
+          <input matEndDate formControlName="end_date" placeholder="结束日期">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </form>
+    <mat-form-field appearance="outline">
+      <mat-label> 每小时工资 </mat-label>
+      <input type="number" matInput [formControl]="hourlyPay">
+    </mat-form-field>
+    <div class="isolated">
+      <mat-checkbox [(ngModel)]="payNow"
+                    color="primary">
+        现在支付
+      </mat-checkbox>
+    </div>
+
+    <mat-divider style="margin-top: 20px; margin-bottom: 20px"></mat-divider>
+
+    <div *ngIf="previewSalary" class="isolated">
+      <p class="subtitle mat-h3">【工资计算】</p>
+      <div class="salary-summary-container">
+        <p class="subtitle">
+          🧮 计件工资：{{previewSalary.unit_salary | currency : 'CNY' : 'symbol-narrow'}}
+        </p>
+        <p class="subtitle">
+          ⏱ 计时工资：{{previewSalary.hour_salary | currency : 'CNY' : 'symbol-narrow'}}
+        </p>
+        <form [formGroup]="salaryGroup"  fxLayout="column" fxLayoutAlign="start start" >
+          <mat-form-field appearance="outline" fxFlex="30">
+            <mat-label> 扣除额 </mat-label>
+            <input type="number" matInput formControlName="deduction">
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="30">
+            <mat-label> 增补额 </mat-label>
+            <input type="number" matInput formControlName="bonus">
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="30">
+            <mat-label> 备注 </mat-label>
+            <input type="text" matInput formControlName="notice">
+          </mat-form-field>
+        </form>
+
+        <p class="mat-h2 info">总计：{{total | currency : 'CNY' : 'symbol-narrow'}}</p>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="60">
+    <p class="subtitle mat-h3"> 【工单信息】</p>
+    <div *ngIf="previewSalary" >
+      <p class="warn" *ngIf="previewSalary && !previewSalary.day_invoice?.length">没有对应的生产记录</p>
+      <mat-card *ngFor="let w of previewSalary.work; let i = index" class="salary-work-container" >
+        <mat-card-content>
+        <div class="item-container" > {{i+1}} - 工艺：{{w.process_name}} | {{w.work_date | date : 'yyyy/MM/dd'}}</div>
+          <div class="item-container" *ngIf="w.unit_pay" fxLayout="row" fxLayoutAlign="start center" >
+            <p>🧮 完成 {{w.unit_pay}} * {{w.complete_unit}}件 = </p><p class="info"> {{((w.unit_pay || 0) * w.complete_unit) | currency : 'CNY' : 'symbol-narrow'}}</p>
+          </div>
+          <div class="item-container" *ngIf="w.hour_pay" fxLayout="row" fxLayoutAlign="start center" >
+            <p>⏱ 工作 {{w.hour_pay}} * {{w.complete_hour}}小时 = </p><p class="info"> {{((w.hour_pay || 0) * w.complete_hour) | currency : 'CNY' : 'symbol-narrow'}}</p>
+          </div>
+        <div class="item-container" ><p class="highlight" mat-line *ngIf="!w.complete_hour && !w.complete_unit"> 该条生产记录数据有缺漏，既无计件工资也无计时工资，将不会被结算 </p></div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button class="action" (click)="onPreviewConfirm()" [disabled]="!salaryGroup.valid"> 预览日期涵盖的生产记录 </button>
+<!--  <button mat-raised-button color="accent" (click)="updateSalaryData()"> 预览工资信息 </button>-->
+  <button mat-raised-button color="primary" (click)="onSalaryConfirm()" [disabled]="!salaryGroup.valid"> 确认提交新工资单 </button>
+  <button mat-button (click)="this.dialogRef.close()">结束</button>
+</div>

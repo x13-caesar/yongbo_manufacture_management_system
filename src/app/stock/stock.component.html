@@ -1,0 +1,137 @@
+<div *ngIf="(!!loadingFlag)" class="loading style-2"><div class="loading-wheel"></div></div>
+<div class="body-container" fxLayout="column" fxLayoutAlign="start center">
+  <div class="nav-track" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10">
+    <p class="sub-header">当前页：</p>
+    <p class="highlight sub-header">配件信息</p>
+  </div>
+  <div class="button-container"><hr class="solid"></div>
+  <div class="button-container" fxLayout="row" fxLayoutAlign="start center">
+    <button class="call" [routerLink]="['/create-spec']" [disabled]="jwtTokenService.getRole()==='employee'">创建新配件/规格</button>
+    <button class="button-nav" [routerLink]="['/vendors']">供应商列表</button>
+    <button class="button-format" (click)="autoSizeAll(false)">自动列宽</button>
+    <button class="view" [routerLink]="['/hidden-compo']"> 查看已隐藏配件（母类） </button>
+    <button class="view" [routerLink]="['/hidden-spec']"> 查看已隐藏物料规格（子类） </button>
+  </div>
+  <ag-grid-angular
+    style="width: 100%; height: 80%"
+    class="ag-theme-material"
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+    [columnDefs]="ColumnDefs"
+    [defaultColDef]="defaultColDef"
+    [animateRows]="true"
+    [localeText]="localeText"
+    [suppressClickEdit]="true"
+    (rowDoubleClicked)="onCompoRowDoubleClicked($event)"
+    [rowGroupPanelShow]="'always'"
+    [getRowStyle]="getRowStyle"
+    [enableCellChangeFlash]="true"
+    [alwaysShowHorizontalScroll]="true"
+    [alwaysShowVerticalScroll]="true"
+    (filterChanged)="showFilter()"
+  >
+  </ag-grid-angular>
+<!--  <div class="button-container fullfill">-->
+<!--    <form [formGroup]="filterGroup">-->
+<!--      <mat-form-field appearance="outline" class="filter">-->
+<!--        <mat-label>搜索</mat-label>-->
+<!--        <input matInput type="text" formControlName="keyword">-->
+<!--      </mat-form-field>-->
+<!--      <mat-form-field appearance="outline" class="filter">-->
+<!--        <mat-label>材料</mat-label>-->
+<!--        <mat-select formControlName="material">-->
+<!--          <mat-option>**不限**</mat-option>-->
+<!--          <mat-option *ngFor="let m of materials" [value]="m">-->
+<!--            {{m}}-->
+<!--          </mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+<!--      <mat-form-field appearance="outline" class="filter">-->
+<!--        <mat-label>分类</mat-label>-->
+<!--        <mat-select formControlName="category">-->
+<!--          <mat-option>**不限**</mat-option>-->
+<!--          <mat-option *ngFor="let c of categories" [value]="c.category">-->
+<!--            {{c.category}}-->
+<!--          </mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+<!--      <button mat-stroked-button color="warn" (click)="checkWarns()">查看危险库存</button>-->
+<!--      <button mat-flat-button (click)="emptyFilter()">清空筛选</button>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--  <div class="content-container" fxLayout="column" fxLayoutAlign="space-between center">-->
+<!--    <h2>配件信息</h2>-->
+<!--  </div>-->
+<!--  <div class="data-table">-->
+<!--    <table mat-table-->
+<!--           [dataSource]="dataSource" multiTemplateDataRows-->
+<!--           class="mat-elevation-z8 data-table">-->
+<!--      <ng-container matColumnDef="{{col}}" *ngFor="let col of displayedProperties">-->
+<!--        <th mat-header-cell *matHeaderCellDef> {{displayedColumns.get(col)}} </th>-->
+<!--        <td mat-cell *matCellDef="let element">-->
+<!--          <div>-->
+<!--            <div class="btn-edit" *ngIf="col ==='edit' ; spanHeader">-->
+<!--              <button mat-icon-button (click)="openUploadPictureDialog(element.id, element.name)" title="上传图片" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon>add_photo_alternate</mat-icon></button>-->
+<!--              <button mat-icon-button (click)="openEditCompoDialog(element)" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon>edit</mat-icon></button>-->
+<!--              <button mat-icon-button (click)="openAddSpecDialog(element)" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon>add_circle</mat-icon></button>-->
+<!--              <button mat-icon-button (click)="openHideCompoDialog(element)" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon color="warn">delete_outline</mat-icon></button>-->
+<!--            </div>-->
+<!--            <div class="btn-edit" *ngIf="col ==='picture'">-->
+<!--              <button mat-icon-button (click)="openShowPictureDialog(element.id);" title="查看图片"><mat-icon>photo</mat-icon></button>-->
+<!--            </div>-->
+<!--            <span #spanHeader>-->
+<!--              <p [attr.class]="dangerousCompos.includes(element) && col==='warn_stock' ? 'mat-h3 warn' : ''">{{element[col]}}</p>-->
+<!--            </span>-->
+<!--          </div>-->
+<!--        </td>-->
+<!--      </ng-container>-->
+
+<!--      &lt;!&ndash; Expanded Content Column - The detail row is made up of this one column that spans across all columns &ndash;&gt;-->
+<!--      <ng-container matColumnDef="expandedDetail">-->
+<!--        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedProperties.length">-->
+<!--          <div class="example-element-detail"-->
+<!--               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">-->
+<!--            <div class="example-element-description" fxLayout="row" fxLayoutAlign="space-around start">-->
+<!--              <mat-card *ngFor="let spec of filterHiddenSpecs(element.specification)">-->
+<!--                <mat-card-header>-->
+<!--                  <mat-card-title class="vertical-isolated">{{spec.vendor?.company}}</mat-card-title>-->
+<!--                </mat-card-header>-->
+<!--                <mat-card-content>-->
+<!--                  <p class="row">子类规格号：{{spec.id}}</p>-->
+<!--                  <p class="row" *ngIf="jwtTokenService.getRole() === 'omni'">价格（税前/后）：{{spec.net_price || '无记录'}} | {{spec.gross_price || '无记录'}}</p>-->
+<!--                  <p class="row">使用 <b class="highlight">{{spec.use_net ? '税前价' : '税后价'}}</b>采购</p>-->
+<!--                  <p class="row">包装数量：{{spec.unit_amount || '无记录'}}</p>-->
+<!--                  <p class="row info">库存：{{spec.stock}}</p>-->
+<!--                </mat-card-content>-->
+<!--                <mat-card-actions>-->
+<!--                  <button mat-icon-button (click)="openShowPictureDialog(spec.id);" title="查看图片"><mat-icon>photo</mat-icon></button>-->
+<!--                  <button mat-stroked-button (click)="openUploadPictureDialog(spec.id, element.name+' - '+spec.vendor?.company)" title="上传图片" [disabled]="jwtTokenService.getRole()==='employee'">传图</button>-->
+<!--                  <button mat-stroked-button color="primary"-->
+<!--                          (click)="openEditSpecDialog(spec, element)"-->
+<!--                          [disabled]="jwtTokenService.getRole()==='employee'">修改</button>-->
+<!--                  <button mat-stroked-button color="warn"-->
+<!--                          (click)="openHideSpecDialog(spec, element)"-->
+<!--                          [disabled]="jwtTokenService.getRole()==='employee'">隐藏</button>-->
+<!--                </mat-card-actions>-->
+<!--              </mat-card>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </td>-->
+<!--      </ng-container>-->
+
+<!--      <tr mat-header-row *matHeaderRowDef="displayedProperties"></tr>-->
+<!--      <tr mat-row *matRowDef="let element; columns: displayedProperties;"-->
+<!--          class="example-element-row"-->
+<!--          [class.example-expanded-row]="expandedElement === element"-->
+<!--          (click)="expandedElement = expandedElement === element ? null : element">-->
+<!--      </tr>-->
+<!--      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>-->
+<!--    </table>-->
+<!--    <mat-paginator [pageSizeOptions]="[20, 50, 100]"-->
+<!--                   showFirstLastButtons-->
+<!--                   aria-label="Select page of products"-->
+<!--                   class="mat-elevation-z8 data-table">-->
+<!--    </mat-paginator>-->
+<!--  </div>-->
+
+</div>

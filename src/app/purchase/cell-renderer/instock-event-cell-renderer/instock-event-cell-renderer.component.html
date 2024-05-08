@@ -1,0 +1,4 @@
+<span>
+  <input style="width: 4rem; padding: 8px .8em; margin: 0 5px;" required type="number" step="1" [(ngModel)]="new_instock_amount">
+  <button (click)="onNewInstockConfirm()" [disabled]="!isAbleToInstock()">入库</button>
+</span>

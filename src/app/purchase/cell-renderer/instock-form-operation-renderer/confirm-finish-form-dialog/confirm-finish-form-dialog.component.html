@@ -1,0 +1,15 @@
+<div mat-dialog-title><p>完成采购单</p></div>
+
+<div mat-dialog-content>
+  <p>采购单{{instock_form.form_id}}（{{instock_form.vendor.company}}）</p>
+  <p>备注：{{instock_form.note}}</p>
+  <p>采购内容：</p>
+  <div *ngFor="let item of instock_form.instock_item">
+    <p>- {{item.display?.component_name}} * {{item.order_quantity}} | 已入库：{{item.warehouse_quantity}}</p>
+  </div>
+  <p>状态将变更为<b class="info">「完成」</b></p>
+</div>
+
+<div mat-dialog-actions class="isolated">
+  <button class="button-action" (click)="onConfirmFinish()">确认</button>
+</div>

@@ -1,0 +1,10 @@
+<span>
+  <button *ngIf="!isEditing(); else onEditingTemplate" class="action" (click)="openEditCompoDialog()" [disabled]="jwtTokenService.getRole()==='employee'">编辑</button>
+  <ng-template #onEditingTemplate>
+    <button class="green" (click)="this.params.api.stopEditing()" [disabled]="jwtTokenService.getRole()==='employee'">完成</button>
+  </ng-template>
+  <button (click)="openUploadPictureDialog()" title="上传图片" [disabled]="jwtTokenService.getRole()==='employee'">上传图片</button>
+  <button (click)="openShowImageDialog()">查看图片</button>
+  <button class="new" (click)="openAddSpecDialog()" [disabled]="jwtTokenService.getRole()==='employee'">添加新规格</button>
+  <button (click)="openHideCompoDialog()" [disabled]="jwtTokenService.getRole()==='employee'">隐藏（下架）</button>
+</span>

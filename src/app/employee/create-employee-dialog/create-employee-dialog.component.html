@@ -1,0 +1,47 @@
+<div mat-dialog-title class="dark-header">
+  <p class="mat-h3">添加新员工</p>
+</div>
+
+<div mat-dialog-content>
+  <form fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="employeeGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>姓名</mat-label>
+      <input matInput type="text" formControlName="name">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>性别</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option value="女">女</mat-option>
+        <mat-option value="男">男</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>出生年月</mat-label>
+      <input matInput [matDatepicker]="picker1" formControlName="birth">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>联系方式</mat-label>
+      <input matInput type="text" formControlName="phone">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>身份证号</mat-label>
+      <input matInput  type="text" formControlName="ssn">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>部门</mat-label>
+      <input matInput  type="text" formControlName="department">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>备注</mat-label>
+      <textarea matInput formControlName="notice"></textarea>
+    </mat-form-field>
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onSubmit(employeeGroup)" cdkFocusInitial>确认提交</button>
+  <button mat-stroked-button color="warn" (click)="onNoClick()">取消</button>
+</div>

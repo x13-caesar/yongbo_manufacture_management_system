@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>隐藏/下架确认</h1>
+<div mat-dialog-content>
+  <p>确定要隐藏以下规格吗（仅该规格不再显示，不影响配件母类信息）？</p>
+  <div class="flex-container">
+    <p class="subtitle piece">{{data.spec.id}}</p>
+    <p class="record piece">{{data.spec.vendor?.company || ''}}</p>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="warn" (click)="onConfirmHide()">确认隐藏</button>
+  <button mat-button mat-dialog-close>取消</button>
+</div>

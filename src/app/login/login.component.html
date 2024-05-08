@@ -1,0 +1,28 @@
+<div class="body-container" fxLayout="row" fxLayoutAlign="center start" >
+  <mat-card fxFlex="45%">
+    <mat-card-title>
+      <p class="mat-title">登陆</p>
+    </mat-card-title>
+    <form fxLayout="column" [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
+      <mat-form-field appearance="outline">
+        <!--  ngModel + name will let Angular take the form control  -->
+        <mat-label>用户名</mat-label>
+        <input matInput type="text" formControlName="username" required>
+        <!--        <mat-error> Username is required</mat-error>-->
+      </mat-form-field>
+      <p *ngIf="loginForm.controls.username.touched && loginForm.controls.username.status !== 'VALID'"
+         class="text-danger"> Username is required </p>
+      <mat-form-field appearance="outline">
+        <mat-label>密码</mat-label>
+        <input matInput type="password" formControlName="password" required>
+        <!--        <mat-error> Password has to be at least 6 characters long </mat-error>-->
+      </mat-form-field>
+      <p *ngIf="loginForm.controls.password.touched && loginForm.controls.password.status !== 'VALID'"
+         class="text-danger"> Password has to be at least 6 characters long </p>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button [disabled]="loginForm.invalid" mat-raised-button color="primary" type="submit"> 确认 </button>
+      </div>
+    </form>
+  </mat-card>
+
+</div>

@@ -1,0 +1,183 @@
+
+<div class="body-container">
+  <div class="button-container">
+    <button mat-button class="view" routerLink="/history"> 返回历史批次 </button>
+    <button mat-button class="export" *ngIf="batch.id" (click)="downloadExcel(batch.id)"> 导出为Excel </button>
+  </div>
+  <div fxLayout="column" fxLayoutAlign=" stretch">
+    <div class="vertical-isolated" fxLayout="row wrap" fxLayoutAlign="start stretch">
+      <mat-card fxFlex="30">
+        <mat-card-header>
+          <mat-card-title><p class="highlight">批次 {{batch.id}} （{{batch.product_name}}）生产小结</p></mat-card-title>
+          <mat-card-subtitle>备注：{{batch.notice}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div  fxLayout="row" fxLayoutAlign="space-between none">
+            <div class="side-super-distance">
+              <p>起始排产/最终达产：</p>
+              <p class="info">实际交付率：</p>
+              <p>开始 ~ 完成日期：</p>
+            </div>
+            <div *ngIf="batch.actual_amount" class="side-super-distance right-align">
+              <p>{{batch.plan_amount}} / {{batch.actual_amount}}</p>
+              <p class="info">{{batch.actual_amount/batch.plan_amount | percent : '1.0-2'}}</p>
+              <p>{{batch.start | date : 'YYYY/MM/dd'}} ~ {{batch.end | date : 'YYYY/MM/dd'}}</p>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <br>
+          <p class="mat-h3 subtitle side-super-distance">批次总成本</p>
+          <div  fxLayout="row" fxLayoutAlign="space-between none">
+            <div class="side-super-distance">
+              <p class="success">标准/实际 配料成本</p>
+              <p class="success">标准/实际 人力成本</p>
+              <p class="success">标准/实际 综合成本</p>
+            </div>
+            <div *ngIf="batch.actual_amount" class="side-super-distance right-align">
+              <p class="success">{{batch.ideal_unit_spec_cost! * batch.plan_amount}} / {{batch.actual_total_spec_cost! | currency : 'CNY' : 'symbol-narrow'}}</p>
+              <p class="success">{{batch.ideal_unit_work_cost! * batch.plan_amount}} / {{batch.actual_total_work_cost! | currency : 'CNY' : 'symbol-narrow'}}</p>
+              <p class="success">{{(batch.ideal_unit_spec_cost! + batch.ideal_unit_work_cost!) * batch.plan_amount | currency : 'CNY' : 'symbol-narrow'}} / {{batch.actual_total_spec_cost! + batch.actual_total_work_cost! | currency : 'CNY' : 'symbol-narrow'}}</p>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <br>
+          <p class="mat-h3 subtitle side-super-distance">单位成本</p>
+          <div fxLayout="row" fxLayoutAlign="space-between none">
+            <div class="side-super-distance">
+              <p>标准/实际单位配料成本：</p>
+              <p>标准/实际单位人力成本：</p>
+              <p class="info">标准/实际 单位综合成本：</p>
+            </div>
+            <div *ngIf="batch.actual_amount" class="side-super-distance right-align">
+              <p>{{batch.ideal_unit_spec_cost! | currency : 'CNY' : 'symbol-narrow'}} / {{batch.actual_unit_spec_cost! | currency : 'CNY' : 'symbol-narrow'}}</p>
+              <p>{{batch.ideal_unit_work_cost! | currency : 'CNY' : 'symbol-narrow'}} / {{(batch.actual_total_work_cost!/batch.actual_amount!) | currency : 'CNY' : 'symbol-narrow'}}</p>
+              <p class="info">
+                {{batch.ideal_unit_spec_cost! + batch.ideal_unit_work_cost! | currency : 'CNY' : 'symbol-narrow'}} / {{batch.actual_unit_overall_cost! | currency : 'CNY' : 'symbol-narrow'}}
+              </p>
+            </div>
+          </div>
+          <br>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                配件消耗总结
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div  fxLayout="row" fxLayoutAlign="space-between none">
+              <div class="side-super-distance">
+                <p class="success" *ngFor="let key of ideal_consumption.keys()">
+                  {{key}}
+                </p>
+              </div>
+              <div class="side-super-distance">
+                <p class="success" *ngFor="let key of ideal_consumption.keys()">
+                  {{actual_consumption.get(key)}} / {{ideal_consumption.get(key) * batch.plan_amount}}
+                </p>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngFor="let bp of bpService.sortedBatchProcesses(batch.batch_process)" fxFlex="30">
+        <mat-card-header>
+          <mat-card-title>  工艺{{bp.process?.process_order}} - {{bp.process?.process_name}} </mat-card-title>
+          <mat-card-subtitle> 参与员工人数： {{bp.work?.length}} </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="bp-overview-container side-super-distance"  fxLayout="row" fxLayoutAlign="space-between none">
+            <div class="overview-title-container">
+              <p>起始排产/最终达产：</p>
+              <p class="info">实际完成率：</p>
+            </div>
+            <div class="overview-data-container right-align" *ngIf="bp.end_amount && bp.start_amount">
+              <p>{{bp.start_amount}} / {{bp.end_amount!}}</p>
+              <p class="info">{{(bp.end_amount!/bp.start_amount) | percent : '1.0-2'}}</p>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <br>
+          <p class="mat-h3 subtitle side-super-distance">该工艺总成本</p>
+          <div class="bp-overview-container side-super-distance"  fxLayout="row" fxLayoutAlign="space-between none">
+            <div class="overview-title-container">
+              <p>标准/实际 配料成本：</p>
+              <p>标准/实际 人工成本：</p>
+              <p class="info">标准/实际 综合成本：</p>
+            </div>
+            <div class="overview-data-container right-align" *ngIf="bp.end_amount && bp.start_amount">
+              <p>{{bp.ideal_unit_spec_cost! * bp.start_amount | currency : 'CNY' : 'symbol-narrow'}} / {{bp.actual_total_spec_cost! | currency : 'CNY' : 'symbol-narrow'}}</p>
+              <p>{{bp.ideal_total_work_cost | currency : 'CNY' : 'symbol-narrow'}} / {{bp.actual_total_work_cost! | currency : 'CNY' : 'symbol-narrow'}}</p>
+              <p class="info">{{(bp.ideal_unit_spec_cost! + bp.unit_pay) * bp.start_amount! | currency : 'CNY' : 'symbol-narrow'}} / {{(bp.actual_total_spec_cost! + bp.actual_total_work_cost!) | currency : 'CNY' : 'symbol-narrow'}}</p>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <br>
+          <p class="mat-h3 subtitle side-super-distance">单位成本</p>
+          <div class="bp-overview-container side-super-distance"  fxLayout="row" fxLayoutAlign="space-between none">
+            <div class="overview-title-container">
+              <p>标准/实际 配料成本：</p>
+              <p>标准/实际 人工成本：</p>
+              <p class="info">标准/实际 综合成本：</p>
+            </div>
+            <div class="overview-data-container right-align" *ngIf="bp.end_amount && bp.start_amount">
+              <p>{{bp.ideal_unit_spec_cost! | currency : 'CNY' : 'symbol-narrow'}} / {{bp.actual_unit_spec_cost! | currency : 'CNY' : 'symbol-narrow'}}</p>
+              <p>{{bp.unit_pay | currency : 'CNY' : 'symbol-narrow'}} / {{(bp.actual_total_work_cost!/bp.end_amount!) | currency : 'CNY' : 'symbol-narrow'}}</p>
+              <p class="info">{{(bp.ideal_unit_spec_cost! + bp.unit_pay) | currency : 'CNY' : 'symbol-narrow'}} / {{(bp.actual_overall_cost!/bp.end_amount!) | currency : 'CNY' : 'symbol-narrow'}}</p>
+            </div>
+          </div>
+          <div class="bp-work-container greyborder distance isolated" *ngFor="let w of bp.work" >
+            <div class="flex-container">
+              <p class="piece">{{w.employee_name}}（工号：{{w.employee_id}}）</p>
+              <p class="piece">领料日期：{{w.work_date | date : "YYYY/MM/dd"}}</p>
+            </div>
+            <div class="flex-container">
+              <p class="piece">实际完成件数：</p>
+              <p class="piece">{{w.complete_unit}}</p>
+            </div>
+            <div class="flex-container" *ngIf="w.complete_hour > 0">
+              <p class="piece record">消耗小时数（计时工单）：</p>
+              <p class="piece">{{w.complete_hour}}</p>
+            </div>
+            <div class="flex-container">
+              <p class="piece">工单人力成本：</p>
+              <p class="piece">{{(w.unit_pay * w.complete_unit + w.hour_pay * w.complete_hour) | currency : 'CNY' : 'symbol-narrow'}}</p>
+            </div>
+  <!--          <div class="flex-container">-->
+  <!--            <p class="piece">工单配件成本</p>-->
+  <!--            <p class="piece">{{w.actual_total_spec_cost | currency : 'CNY' : 'symbol-narrow'}}</p>-->
+  <!--            <p class="piece">({{w.actual_unit_spec_cost}} * {{w.complete_unit}})</p>-->
+  <!--          </div>-->
+  <!--          <div class="flex-container">-->
+  <!--            <p class="piece info">核算后单位成本</p>-->
+  <!--            <p class="piece info">{{w.actual_unit_overall_cost | currency : 'CNY' : 'symbol-narrow'}}</p>-->
+  <!--          </div>-->
+  <!--          <div class="flex-container">-->
+  <!--            <p class="piece">生产达成率</p>-->
+  <!--            <p class="piece">{{(w.complete_unit/w.plan_unit) | percent : '1.0-2'}}</p>-->
+  <!--            <p class="piece">({{w.complete_unit}}/{{w.plan_unit}})</p>-->
+  <!--          </div>-->
+  <!--          <mat-expansion-panel>-->
+  <!--            <mat-expansion-panel-header>-->
+  <!--              <mat-panel-title>-->
+  <!--                配料综合损耗率 {{calculateWorkAttribution(w) | percent}}-->
+  <!--              </mat-panel-title>-->
+  <!--              <mat-panel-description>-->
+  <!--                <p class="warn">耗损{{(w.actual_unit_spec_cost! - bp.ideal_unit_spec_cost!) | currency : 'CNY' : 'symbol-narrow'}}</p>-->
+  <!--              </mat-panel-description>-->
+  <!--            </mat-expansion-panel-header>-->
+  <!--            <mat-list>-->
+  <!--              <mat-list-item class="flex-container" *ngFor="let ws of w.work_specification">-->
+  <!--                <p class="detail record piece">{{ws.component_name}}</p>-->
+  <!--                <p class="detail record piece" *ngIf="ws.actual_amount">耗损率：{{((ws.actual_amount-ws.plan_amount)/ws.plan_amount) | percent}}</p>-->
+  <!--                <p class="detail record piece">({{ws.actual_amount}}/{{ws.plan_amount}})</p>-->
+  <!--              </mat-list-item>-->
+  <!--            </mat-list>-->
+  <!--          </mat-expansion-panel>-->
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

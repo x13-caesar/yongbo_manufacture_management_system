@@ -1,0 +1,614 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/ag-grid-community/styles/ag-grid.css';
+@import '../node_modules/ag-grid-community/styles/ag-theme-alpine.css';
+@import '../node_modules/ag-grid-community/styles/ag-theme-material.css';
+@import 'app/shared/button-format';
+@import 'app/shared/button-view';
+@import 'app/shared/coloring';
+@import 'app/shared/row';
+
+html, body {
+  height: 100%;
+  width: 100%;
+  //padding: 5px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* You can add global styles to this file, and also import other style files */
+:root{
+  --logoblue: rgb(95, 141, 157);
+  --highlightblue: rgb(52, 152, 219);
+  --lowkeyblue: rgb(41, 128, 185);
+  --deepblue: rgb(0, 18, 66);
+  --darkblue: rgb(52, 73, 94);
+  --infoyellow: rgb(209, 123, 15);
+  --infopeel: rgb(255, 160, 28);
+  --humblegreen: rgb(159, 183, 152);
+  --forestgreen: rgb(10, 50, 0);
+  --warnred: rgb(192, 57, 43);
+  --coral: rgb(239, 111, 108);
+  --backwardgrey: rgb(127, 140, 141);
+  --lightgold: rgb(220, 196, 142);
+  --bggrey: rgb(242, 245, 247);
+  --bglight: rgb(242, 245, 247);
+  --headerblue: rgb(0, 93, 124);
+}
+
+.clickable:hover {
+  cursor: pointer;
+  background-color: bisque;
+}
+
+.slogan {
+  color: darkorange;
+}
+
+.disabled {
+  color: grey;
+  font-style: italic;
+}
+
+html, body {
+  height: 100%;
+  background-color: whitesmoke;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+//mat-card {
+//  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2), 0 15px 50px 0 rgba(0, 0, 0, 0.2);
+//}
+
+.grid-wrapper {
+  flex: 1 1 auto;
+}
+
+.ag-theme-material {
+  --ag-header-foreground-color: white;
+  --ag-header-background-color: #37474F;
+  --ag-header-cell-hover-background-color: #78909C;
+  --ag-header-cell-moving-background-color: #78909C;
+}
+
+mat-card-header.dark-header, div.dark-header {
+  background-color: #546E7A;
+  //border-radius: 5px;
+  position: relative;
+  height: 40px;
+}
+
+mat-card-header.dark-header p, div.dark-header p {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: ghostwhite;
+}
+
+img.logo-normal {
+  width: 200px;
+}
+
+img.profile {
+  object-fit: cover;
+  width: 140px;
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+img.profile-small {
+  object-fit: cover;
+  width: 60px;
+  height: 60px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+img.scenario {
+  object-fit: cover;
+  width: 400px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+img.scenario-small {
+  object-fit: cover;
+  width: 240px;
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.sub-header {
+  font-size: 24px;
+  margin: 0 !important;
+}
+
+.body-container {
+  padding-left: 5%;
+  padding-right: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; height: 100%; padding-top: 10px
+}
+
+.column-container {
+  margin: 25px;
+  height: 100%;
+}
+
+.row-container {
+  padding: 10px;
+  width: 100%;
+}
+
+.item-container {
+  margin: 5px;
+}
+
+.data-table {
+  width: 100%;
+}
+
+.fullfill {
+  width: 100%;
+}
+
+.main-content {
+  padding-left: 10%;
+  padding-right: 10%;
+  align-items: center;
+}
+
+.ety-percent-fill {
+  width: 80%
+}
+
+.nty-percent-fill {
+  width: 90%
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+div.mini-container {
+  width: 10%;
+  height: 10%;
+}
+
+p.vertical-middle {
+  position: absolute;               /* 2 */
+  top: 50%;                         /* 3 */
+  transform: translate(-50%, -50%);   /* 4 */
+}
+
+.highlight {
+  color: #2c5777;
+  font-weight: bold;
+}
+
+p.subtitle {
+  font-weight: bold;
+}
+
+p.whiteout {
+  color: whitesmoke;
+}
+
+p.info, b.info {
+  color: darkorange;
+}
+
+p.bullet-point {
+  font-size: 12px;
+  color: black;
+  padding: 0 24px;
+}
+
+p.warn, b.warn {
+  color: orangered;
+}
+
+p.super-warn {
+  background-color: red;
+  color: white;
+}
+
+p.success, b.success {
+  color: darkgreen;
+}
+
+p.cancelled {
+  text-decoration: line-through;
+}
+
+p.record {
+  color: midnightblue;
+}
+
+p.detail {
+  font-size: small;
+}
+
+p.squeeze {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+p.promise {
+  color: steelblue;
+}
+
+p.piece {
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+p.super-piece {
+  vertical-align: middle;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+p.row {
+  margin-top: 5px;
+}
+
+button {
+  margin: 0 5px;
+  padding: 8px .8em;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15385;
+  outline: none;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+button:hover {
+  background-color: whitesmoke;
+  font-weight: bold;
+}
+
+button.scare {
+  margin: 5px;
+  color: white !important;
+  background-color: darkred;
+}
+
+button.chip {
+  margin: 5px;
+  background-color: #1652F0;
+  border: 1px solid #1652F0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: Graphik,-apple-system,system-ui,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  font-size: 14px;
+  line-height: 1.15;
+  overflow: visible;
+  padding: 12px 16px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transition: all 80ms ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+}
+
+button.chip:hover {
+  background-color: #0A46E4;
+  border-color: #0A46E4;
+}
+
+button.chip:active {
+  background-color: #0039D7;
+  border-color: #0039D7;
+}
+
+button.chip:focus {
+  outline: 0;
+}
+
+
+
+button.call {
+  margin: 5px;
+  color: white !important;
+  background-color: cadetblue;
+  //background-color: #e1ecf4;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+}
+
+button.info {
+  margin: 0 5px;
+  color: white !important;
+  background-color: darkorange;
+}
+
+button.next {
+  margin: 0 5px;
+  background-image: linear-gradient(-180deg, #37AEE2 0%, #1E96C8 100%);
+  border-radius: .25rem;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+button.next:hover {
+  background-image: linear-gradient(-180deg, #1D95C9 0%, #17759C 100%);
+}
+
+
+button.export {
+  margin: 0 5px;
+  color: whitesmoke !important;
+  background-color: darkolivegreen;
+}
+
+button.option {
+  margin: 5px;
+  color: white;
+  background-color: darkorange;
+  opacity: 0.5;
+}
+
+button.option:hover {
+  color: white;
+  opacity: 1;
+}
+
+.button-container {
+  position: relative;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.nav-track {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.flex-container {
+  display: flex;
+  text-align:center;
+}
+
+.flex-vertical-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.greybg {
+  background-color: whitesmoke;
+}
+
+.greyborder {
+  border: 1px solid lightgrey;
+}
+
+.distance {
+  padding: 2%
+}
+
+.side-super-distance {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+div.right-align {
+  text-align: right;
+}
+
+.isolated {
+  margin: 1rem 0;
+}
+
+.vertical-isolated {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  align-content: center;
+  justify-content: center;
+}
+
+.super-isolated {
+  margin: 5%;
+}
+
+div.justify {
+  display:flex;
+  text-align: justify
+}
+
+.loading {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.5);
+  z-index: 9999;
+}
+.loading-wheel {
+  width: 20px;
+  height: 20px;
+  margin-top: -40px;
+  margin-left: -40px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  border-width: 30px;
+  border-radius: 50%;
+  -webkit-animation: spin 1s linear infinite;
+}
+.style-2 .loading-wheel {
+  border-style: double;
+  border-color: #ccc transparent;
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(-360deg);
+  }
+}
+
+
+.row-finished-and-paid {
+  font-style: italic;
+  color: darkgrey;
+  background-color: lightblue !important;
+}
+
+.row-finished {
+  background-color: lightblue !important;
+}
+
+.row-cancelled {
+  background-color: indianred !important;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.button-nav {
+  background-color: #e1ecf4;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #39739d;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15385;
+  margin: 0 5px;
+  outline: none;
+  padding: 8px .8em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.button-nav:hover,
+.button-nav:focus {
+  background-color: #b3d3ea;
+  color: #2c5777;
+}
+
+.button-nav:focus {
+  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+}
+
+.button-nav:active {
+  background-color: #a0c7e4;
+  box-shadow: none;
+  color: #2c5777;
+}
+
+/* Removes the clear button from date inputs */
+input[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+/* Removes the spin button */
+input[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+/* Always display the drop down caret */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: #2c3e50;
+}
+
+/* A few custom styles for date inputs */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  color: #95a5a6;
+  font-family: "Helvetica", arial, sans-serif;
+  font-size: 18px;
+  border:1px solid #ecf0f1;
+  background:#ecf0f1;
+  padding:5px;
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+input[type="date"], focus {
+  color: #95a5a6;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+}
+
+/* Dashed border */
+hr.dashed {
+  border-top: 3px dashed #bbb;
+}
+
+/* Dotted border */
+hr.dotted {
+  border-top: 3px dotted #bbb;
+}
+
+/* Solid border */
+hr.solid {
+  border-top: 3px solid #bbb;
+}

@@ -1,0 +1,58 @@
+<div mat-dialog-title class="dark-header">
+  <p class="mat-h3">为<{{data.compo.name}}>添加新规格</p>
+</div>
+
+<div mat-dialog-content>
+  <div class="button-container clearfix" fxLayout="row" fxLayoutAlign="center center">
+    <button mat-raised-button color="primary" (click)="openCreateVendorDialog()"> 添加新供应商<mat-icon>store</mat-icon> </button>
+  </div>
+  <form fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="specGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>供应商</mat-label>
+      <input type="text" matInput [formControl]="selectedVendor" [matAutocomplete]="autoBeta">
+      <mat-autocomplete #autoBeta="matAutocomplete" [displayWith]="vendorService.vendorDisplayFn">
+        <mat-option *ngFor="let vendor of this.vendorOptions | async" [value]="vendor">
+          {{vendor.name}} | {{vendor.company}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" >
+      <mat-form-field appearance="outline" fxFlex="80">
+        <mat-label>规格编码</mat-label>
+        <input matInput type="text" formControlName="id">
+        <mat-error *ngIf="specGroup.controls['id'].errors?.existing"> 编码已存在 </mat-error>
+      </mat-form-field>
+      <button mat-stroked-button class="call" fxFlex="20" (click)="generateSpecId()">生成</button>
+    </div>
+
+    <div class="nty-percent-fill" fxLayout="row" fxLayoutAlign="center none">
+      <mat-form-field appearance="outline" class="price-field">
+        <mat-label>税前价格</mat-label>
+        <input matInput type="number" formControlName="net_price">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="price-field">
+        <mat-label>含税价格</mat-label>
+        <input matInput type="number" formControlName="gross_price">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>初始库存</mat-label>
+      <input matInput type="number" formControlName="stock">
+      <mat-hint align="end">默认值为0</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>备注</mat-label>
+      <textarea matInput formControlName="notice"></textarea>
+    </mat-form-field>
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!specGroup.valid" (click)="onSpecSubmit(specGroup)">确认提交</button>
+  <button mat-button color="warn" (click)="dialogRef.close()">取消</button>
+</div>

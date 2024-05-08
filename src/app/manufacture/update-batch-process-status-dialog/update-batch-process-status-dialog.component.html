@@ -1,0 +1,94 @@
+<h2 mat-dialog-title> 批次 - {{data.bp.batch_id}} 工艺 [{{data.bp.process?.process_name!}}] 完成情况 </h2>
+<div mat-dialog-content fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+  <div>
+    <div *ngFor="let w of newWorksToSubmit; let i = index;">
+      <mat-card id="work-{{i.toString()}}" class="greyborder isolated distance">
+        <mat-card-content fxLayout="column wrap">
+          <div fxFlex="50" fxLayout="row" fxLayoutAlign="space-between center" >
+            <p class="record piece">{{w.employee_name}}（工号 {{w.employee_id}}）</p>
+            <p class=" piece">{{w.work_date | date : 'yyyy/MM/dd'}}</p>
+            <p class="piece">🧮 完成件数：<b class="info">{{w.complete_unit}}</b></p>
+            <p class="piece">⏱ 累计计费小时：<b class="info">{{w.complete_hour}}</b></p>
+            <button class="warn" (click)="removeParticipant(i)"> 移除 </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+    <form [formGroup]="workForm">
+      <div fxLayout="row wrap" fxLayoutGap="20px">
+        <mat-form-field appearance="outline">
+          <mat-label>参与工人</mat-label>
+          <input matInput required placeholder="参与工人" [formControl]="participatedEmployeeSelected" [matAutocomplete]="eauto">
+          <mat-autocomplete #eauto="matAutocomplete" [displayWith]="employeeService.employeeDisplayFn" (optionSelected)="jumpToCompleteUnit()">
+            <mat-option *ngFor="let e of employeeOptions | async" [value]="e">
+              {{e.name}} (工号{{e.id}})
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <p>{{workForm.get('employee_id')?.errors?.existing}}</p>
+        <mat-form-field appearance="outline" >
+          <mat-label>工人姓名</mat-label>
+          <input matInput readonly type="text" formControlName="employee_name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>工人员工号</mat-label>
+          <input matInput readonly type="number" formControlName="employee_id">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>完工日期</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="work_date">
+          <mat-datepicker-toggle matSuffix [for]="picker">
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex="15" appearance="outline">
+          <mat-label>完成件数</mat-label>
+          <input matInput #completeUnit required type="number" formControlName="complete_unit">
+          <mat-error>完成件数必须为整数.</mat-error>
+        </mat-form-field>
+<!--        <mat-form-field fxFlex="15" appearance="outline">-->
+<!--          <mat-label>每件工资</mat-label>-->
+<!--          <input matInput type="number" formControlName="unit_pay">-->
+<!--        </mat-form-field>-->
+        <mat-form-field fxFlex="15" appearance="outline">
+          <mat-label>工作小时数</mat-label>
+          <input matInput type="number" formControlName="complete_hour">
+        </mat-form-field>
+
+<!--        <mat-form-field fxFlex="15" appearance="outline">-->
+<!--          <mat-label>每小时工资</mat-label>-->
+<!--          <input matInput type="number" formControlName="hour_pay">-->
+<!--        </mat-form-field>-->
+        <button mat-raised-button fxFlex="10" style="height: 45px" color="accent" (click)="onAddNewParticipant()" [disabled]="!workForm.valid">增加</button>
+      </div>
+      <div>
+
+      </div>
+    </form>
+  <div>
+    <mat-divider [inset]="true"></mat-divider>
+  </div>
+
+  <br>
+  <div fxLayout="column wrap">
+    <div fxFlex="50" fxLayout="row" fxLayoutAlign="space-between center" >
+      <p class="record piece">🧮 生产件数合计：{{summary.unit}}</p>
+<!--      <p class="record piece">（计件工资合计：<b class="info">{{summary.unit_pay}}</b>）</p>-->
+    </div>
+    <div fxFlex="50" fxLayout="row" >
+      <p class=" piece">⏱ 付费小时合计：{{summary.hour}}</p>
+<!--      <p class=" piece">（计时工资合计：<b class="info">{{summary.hour_pay}}</b>）</p>-->
+    </div>
+<!--    <div fxFlex="50" fxLayout="row" >-->
+<!--      <p class=" piece"> 🛠 消耗配件成本合计：{{calculateTotalComponentGrossPrice(data.bp.warehouse_record || [])}}</p>-->
+<!--    </div>-->
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onConfirmSubmit()" [disabled]="!isWorksValidToSubmit()"> 确认更新 </button>
+  <button mat-stroked-button (click)="dialogRef.close()">退出</button>
+  <p *ngIf="!isEmployeeUniqueInWorks()" class="super-warn piece">有重复的参与工人，请编辑后再提交</p>
+  <p *ngIf="this.data.bp.start_amount < this.currentTotalCompleteUnits()" class="super-warn piece">完成件数总和大于 {{data.bp.start_amount}}，无法提交</p>
+</div>

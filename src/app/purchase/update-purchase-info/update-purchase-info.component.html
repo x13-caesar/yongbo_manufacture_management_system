@@ -1,0 +1,85 @@
+<div class="body-container" fxLayout="column" fxLayoutAlign="start center">
+  <div class="nav-track" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10">
+    <p class="highlight sub-header">更新采购信息</p>
+  </div>
+  <div class="button-container">
+    <hr class="solid">
+  </div>
+  <div class="button-container" fxLayout="row" fxLayoutAlign="start center">
+    <button class="button-nav" routerLink="/instock-item">采购（配件追踪视图）</button>
+    <button class="button-nav alternative" routerLink="/instock-form">入库（采购单视图）</button>
+  </div>
+  <h2>公司信息</h2>
+  <form fxLayout="row" fxLayoutAlign="space-around center" [formGroup]="companyForm" (ngSubmit)="onCompanyInfoSubmit()" #formDirective="ngForm">
+    <mat-form-field>
+      <mat-label>公司名称</mat-label>
+      <input matInput formControlName="公司名称">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>收货地址</mat-label>
+      <input matInput formControlName="收货地址">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>收货联系人</mat-label>
+      <input matInput formControlName="收货联系人">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>电话</mat-label>
+      <input matInput formControlName="电话">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>传真</mat-label>
+      <input matInput formControlName="传真">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>邮编</mat-label>
+      <input matInput formControlName="邮编">
+    </mat-form-field>
+
+    <button mat-raised-button class="submit-btn" color="primary" type="submit" [disabled]="!companyForm.valid">保存</button>
+  </form>
+  <br>
+  <br>
+  <br>
+  <h2>开票信息</h2>
+  <form fxLayout="row" fxLayoutAlign="space-around center" [formGroup]="kaipiaoForm" (ngSubmit)="onKaipiaoInfoSubmit()" #formDirective="ngForm">
+    <mat-form-field>
+      <mat-label>公司名称</mat-label>
+      <input matInput formControlName="公司名称">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>税号</mat-label>
+      <input matInput formControlName="税号">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>开户行</mat-label>
+      <input matInput formControlName="开户行">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>账户</mat-label>
+      <input matInput formControlName="账户">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>地址</mat-label>
+      <input matInput formControlName="地址">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>电话</mat-label>
+      <input matInput formControlName="电话">
+    </mat-form-field>
+
+    <button mat-raised-button class="submit-btn" color="primary" type="submit" [disabled]="!companyForm.valid">保存</button>
+  </form>
+</div>
+
+

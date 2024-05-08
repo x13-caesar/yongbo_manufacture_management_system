@@ -1,0 +1,43 @@
+<div mat-dialog-title class="dark-header">
+  <p class="mat-h3">创建新生产批次</p>
+</div>
+
+<div mat-dialog-content fxLayout="row" fxLayoutAlign="center none">
+  <form [formGroup]="batchGroup" fxLayout="column" fxLayoutAlign="space-around start">
+    <mat-form-field appearance="outline">
+      <mat-label>生产产品</mat-label>
+      <input matInput formControlName="product" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="productDisplayFn">
+        <mat-option *ngFor="let p of this.productOptions | async" [value]="p">
+          {{p.name}} | {{p.id}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="batchGroup.controls['product'].errors?.no_product"> 该产品不存在或已停用 </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>计划生产数量</mat-label>
+      <input matInput type="number" formControlName="plan_amount">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>开工日期</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="start">
+      <mat-datepicker-toggle matSuffix [for]="picker">
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>备注</mat-label>
+      <textarea matInput formControlName="notice"></textarea>
+    </mat-form-field>
+  </form>
+</div>
+
+<div *ngIf="(!!loadingFlag)" class="loading style-2"><div class="loading-wheel"></div></div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onBatchSubmit(batchGroup)" [disabled]="!batchGroup.valid">确认提交</button>
+  <button mat-button (click)="onNoClick()">结束</button>
+</div>

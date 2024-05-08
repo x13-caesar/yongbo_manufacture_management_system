@@ -1,0 +1,50 @@
+<div mat-dialog-title>
+  <p class="mat-h3">编辑产品信息</p>
+</div>
+
+<div mat-dialog-content>
+  <form fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="productGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>产品序列号</mat-label>
+      <input matInput formControlName="id" [attr.disabled]="true">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>产品名称</mat-label>
+      <input matInput formControlName="name">
+      <mat-hint align="end">可以与其他产品重复</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>分类</mat-label>
+      <input matInput formControlName="category">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>产品描述</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>库存</mat-label>
+      <input matInput type="number" formControlName="inventory">
+      <mat-hint align="end">默认值为零</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>定制客户</mat-label>
+      <input matInput type="text" formControlName="custom">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>备注</mat-label>
+      <textarea matInput formControlName="notice"></textarea>
+    </mat-form-field>
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" type="submit" [disabled]="!productGroup.valid" (click)="onProductInfoConfirm(productGroup)">确认提交</button>
+  <button mat-button color="warn" (click)="dialogRef.close()">取消</button>
+</div>

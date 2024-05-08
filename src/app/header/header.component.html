@@ -1,0 +1,23 @@
+<nav class="topnav">
+  <a routerLink="/overview">雍博数字化生产管理系统</a>
+  <a class="nav-link" ><p class="detail squeeze">{{version}}</p></a>
+  <a class="nav-link" [routerLink]="['/overview']" [routerLinkActive]="['active']">首页</a>
+  <a class="nav-link" routerLink="/manufacture" routerLinkActive="active">生产</a>
+  <a class="nav-link" routerLink="/inventory" routerLinkActive="active">产品</a>
+  <a class="nav-link" routerLink="/stock" routerLinkActive="active">配件</a>
+  <a class="nav-link" routerLink="/instock-item" routerLinkActive="active">采购</a>
+  <a class="nav-link" routerLink="/employee" routerLinkActive="active">人员</a>
+  <a class="nav-link" routerLink="/salary" routerLinkActive="active">工资</a>
+  <a class="nav-link" routerLink="/operations" routerLinkActive="active">操作记录</a>
+
+  <div fxLayout="row" fxLayoutAlign="end center" >
+    <div class="welcome-info-container">
+      <p class="whiteout vertical-middle" *ngIf="auth.user">欢迎，{{auth.user.username}}</p>
+    </div>
+    <button mat-raised-button color="primary" class="navbar-login nav-link" *ngIf="!auth.user; else logoutTemplate" routerLink="/login" routerLinkActive="active"> 登陆 </button>
+    <ng-template #logoutTemplate>
+      <button mat-stroked-button class="action pointer navbar-login nav-link" (click)="onLogout()"> 退出 </button>
+    </ng-template>
+  </div>
+
+</nav>

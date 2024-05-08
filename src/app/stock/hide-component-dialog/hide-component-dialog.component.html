@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>隐藏操作确认</h1>
+<div mat-dialog-content>
+<!--  <p class="promise">相关规格会暂时保留，如需找回，再次添加同样编码的配件即可。</p>-->
+  <p>确定要隐藏以下配件信息吗？</p>
+  <div class="flex-container">
+    <p class="subtitle piece">{{data.compo.id}}</p>
+    <p class="subtitle piece">{{data.compo.name}}</p>
+    <p class="record piece">{{data.compo.description}}</p>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="warn" (click)="onConfirmDelete()">确认隐藏配件</button>
+  <button mat-button mat-dialog-close>取消</button>
+</div>

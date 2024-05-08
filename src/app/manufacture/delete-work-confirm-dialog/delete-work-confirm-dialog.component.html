@@ -1,0 +1,8 @@
+<h2 mat-dialog-title> 确认删除该工人的参与/领料记录 </h2>
+<mat-dialog-content class="mat-typography">
+  <p class="warn">你确定要取消记录 {{data.work.employee_name!}}（{{data.work.product_name}}）吗？</p>
+</mat-dialog-content>
+<mat-dialog-content>
+  <button mat-raised-button color="warn" (click)="cancelBatch(data.work)"> 确认取消 </button>
+  <button mat-stroked-button (click)="dialogRef.close()">退出</button>
+</mat-dialog-content>

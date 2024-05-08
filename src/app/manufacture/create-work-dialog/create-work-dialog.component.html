@@ -1,0 +1,51 @@
+<div mat-dialog-title>
+  <p class="mat-h3">添加参与员工</p>
+</div>
+
+<div mat-dialog-content class="nty-percent-fill">
+  <p>{{batchProcess.process?.process_name}}</p>
+  <form fxLayout="column" fxLayoutAlign="space-around start">
+    <mat-form-field appearance="outline">
+      <mat-label>工人</mat-label>
+      <input type="text" matInput [formControl]="selectedEmployee" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="this.employeeService.employeeDisplayFn">
+        <mat-option *ngFor="let emp of this.employeeOptions | async" [value]="emp">
+          {{emp.name}} | {{emp.id}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>领料日期</mat-label>
+      <input matInput [matDatepicker]="picker" [formControl]="work_date">
+      <mat-datepicker-toggle matSuffix [for]="picker">
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>应完成数量</mat-label>
+      <input type="number" matInput [formControl]="plan_unit">
+    </mat-form-field>
+
+    <mat-divider></mat-divider>
+    <div [formGroup]="workSpecGroup" class="fullfill">
+      <div *ngFor="let record of batchProcess.warehouse_record" class="fullfill" fxLayout="row" fxLayoutAlign="space-between center">
+        <p fxFlex="45">{{record.component_name}} | 应领：{{(plan_unit.value || 0) * record.consumption}}</p>
+        <mat-form-field appearance="outline" fxFlex="45">
+          <mat-label>实领</mat-label>
+          <input matInput [formControlName]="record.specification_id">
+          <mat-hint>随后可修改</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onWorkConfirm()" [disabled]="!ifInputValid()">确认提交</button>
+  <button mat-button (click)="onNoClick()">结束</button>
+</div>

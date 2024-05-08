@@ -1,0 +1,66 @@
+<div *ngIf="(!!loadingFlag)" class="loading style-2"><div class="loading-wheel"></div></div>
+<div class="body-container" fxLayout="column" fxLayoutAlign="start center">
+  <div class="button-container fullfill">
+    <form [formGroup]="filterGroup" fxLayout="row" fxLayoutAlign="start center" >
+      <mat-form-field appearance="outline" class="filter">
+        <mat-label>搜索</mat-label>
+        <input matInput type="text" formControlName="keyword">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="filter">
+        <mat-label>种类</mat-label>
+        <mat-select formControlName="category">
+          <mat-option>**不限**</mat-option>
+          <mat-option *ngFor="let c of categories" [value]="c">
+            {{c}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-flat-button (click)="emptyFilter()">清空筛选</button>
+
+    </form>
+    <button mat-button class="call" [routerLink]="['/create-product']" [disabled]="jwtTokenService.getRole()==='employee'"> 创建新产品 </button>
+    <button class="button-view" [routerLink]="['/delivery']"> 查看交付记录 </button>
+    <button class="button-view" [routerLink]="['/buyer']"> 客户信息列表 </button>
+    <button class="button-view" [routerLink]="['/deprecated']"> 查看停用产品 </button>
+  </div>
+
+  <div class="content-container" fxLayout="column" fxLayoutAlign="space-between center">
+    <h2>产品信息</h2>
+  </div>
+  <div class="mat-elevation-z8 data-table">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 data-table">
+      <ng-container matColumnDef="{{col}}" *ngFor="let col of displayedProperties">
+        <th mat-header-cell *matHeaderCellDef> {{displayedColumns.get(col)}} </th>
+        <td mat-cell *matCellDef="let element">
+          <div *ngIf="!element.isEdit">
+            <div class="btn-edit" *ngIf="col ==='edit' ; spanHeader">
+              <button mat-icon-button (click)="openUploadPictureDialog(element.id, element.name)" title="上传图片" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon>add_photo_alternate</mat-icon></button>
+              <button mat-icon-button [routerLink]="['/edit-product/', element.id]" title="编辑" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="openCreateDeliveryDialog(element)" title="交付" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon>local_shipping</mat-icon></button>
+              <button mat-icon-button (click)="openCopyProductDialog(element)" title="复制" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon>content_copy</mat-icon></button>
+              <button mat-icon-button (click)="openDeprecateConfirmDialog(element)" title="停用" [disabled]="jwtTokenService.getRole()==='employee'"><mat-icon color="warn">delete_outline</mat-icon></button>
+            </div>
+            <div class="btn-edit" *ngIf="col ==='picture'">
+              <button mat-icon-button (click)="openShowPictureDialog(element.id);" title="查看图片"><mat-icon>photo</mat-icon></button>
+            </div>
+            <span #spanHeader>
+              {{element[col]}}
+            </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedProperties"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedProperties;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[20, 50, 100]"
+                   showFirstLastButtons
+                   aria-label="Select page of products"
+                   class="mat-elevation-z8 data-table">
+    </mat-paginator>
+
+  </div>
+
+
+</div>

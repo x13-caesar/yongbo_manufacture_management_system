@@ -1,0 +1,39 @@
+<div mat-dialog-title>
+  <p class="mat-h3">添加新供应商</p>
+</div>
+
+<div mat-dialog-content>
+  <form fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="buyerGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>联系人名称</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>公司名称</mat-label>
+      <input matInput formControlName="company">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>联系电话</mat-label>
+      <input matInput formControlName="contact">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>付款周期</mat-label>
+      <input matInput formControlName="payment_period">
+      <mat-hint align="end">仅记录作参考</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>地址</mat-label>
+      <input matInput formControlName="address">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>备注</mat-label>
+      <input matInput formControlName="notice">
+    </mat-form-field>
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onSubmit(buyerGroup)" cdkFocusInitial>确认提交</button>
+  <button mat-stroked-button color="warn" (click)="onNoClick()">取消</button>
+</div>

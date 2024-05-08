@@ -1,0 +1,7 @@
+<span>
+  <button class="action" style="margin: 0 5px" (click)="onInstockEventClick()" [disabled]="form.form_status !== 'ongoing'">新入库</button>
+  <button style="margin: 0 5px" (click)="onInstockFormViewClick()">采购单详情</button>
+  <button style="margin: 0 5px" (click)="onInstockHistoryViewClick()">查看入库记录</button>
+  <button style="margin: 0 5px" (click)="onExportExcelClick()">导出Excel</button>
+  <button class="action" style="margin: 0 5px" (click)="onFinishFormClick()">完成采购单</button>
+</span>

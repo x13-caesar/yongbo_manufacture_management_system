@@ -1,0 +1,9 @@
+<h2 mat-dialog-title> {{data.key}} - {{data.display_name}} </h2>
+<div mat-dialog-content>
+  <img src="{{'https://ybmms-component-pic.oss-cn-hangzhou.aliyuncs.com/'+data.key+'?x-oss-process=style/picture_baseline'}}" class="img-responsive">
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onClickDownload()">下载</button>
+  <button mat-button color="warn" (click)="dialogRef.close()">关闭</button>
+</div>

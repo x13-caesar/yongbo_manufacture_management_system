@@ -1,0 +1,87 @@
+<div *ngIf="(!!checkLoadingFinished())" class="loading style-2"><div class="loading-wheel"></div></div>
+<div>
+  <div class="body-container" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="row-container" fxLayout="row" fxLayoutAlign="space-around center">
+    </div>
+  </div>
+  <div class="body-container" fxLayout="row" fxLayoutAlign="space-between start">
+    <div class="row-container" fxLayout="column" fxLayoutAlign="start">
+      <mat-card class="column mat-elevation-z8">
+        <mat-card-title>
+          <p>未完成批次</p>
+        </mat-card-title>
+        <mat-card-content>
+          <p class="info mat-title" *ngIf="!ongoing_batches && !plan_batches"> 没有未完成的生产批次 </p>
+          <mat-list>
+            <div mat-subheader>加急</div>
+            <mat-list-item class="clickable" *ngFor="let batch of urgent_batches" [routerLink]="['/manufacture', batch.id]">
+              <mat-icon mat-list-icon>speed</mat-icon>
+              <div mat-line><p class="warn">{{batch.id}} - {{batch.product_name}} * {{batch.plan_amount}}件</p></div>
+              <div mat-line> 开工时间：{{batch.start | date : 'YYYY/MM/dd'}} </div>
+            </mat-list-item>
+            <mat-divider [inset]="true"></mat-divider>
+            <div mat-subheader>生产中</div>
+            <mat-list-item class="clickable" *ngFor="let batch of ongoing_batches" [routerLink]="['/manufacture', batch.id]">
+              <mat-icon mat-list-icon>pending</mat-icon>
+              <div mat-line><p class="success">{{batch.id}} - {{batch.product_name}} * {{batch.plan_amount}}件</p></div>
+              <div mat-line> 开工时间：{{batch.start | date : 'YYYY/MM/dd'}} </div>
+            </mat-list-item>
+            <mat-divider [inset]="true"></mat-divider>
+            <div mat-subheader>未开始</div>
+            <mat-list-item class="clickable" *ngFor="let batch of plan_batches" [routerLink]="['/manufacture', batch.id]">
+              <mat-icon mat-list-icon>update</mat-icon>
+              <div mat-line><p class="promise">{{batch.id}} - {{batch.product_name}} * {{batch.plan_amount}}件</p></div>
+              <div mat-line> 开工时间：{{batch.start | date : 'YYYY/MM/dd'}} </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="column mat-elevation-z8">
+        <mat-card-title>
+          <p>过去一周完成批次</p>
+        </mat-card-title>
+        <mat-card-content>
+          <p class="info mat-title" *ngIf="!recent_finished_batches"> 过去一周没有完成生产批次 </p>
+          <mat-list>
+            <mat-list-item class="clickable" *ngFor="let batch of recent_finished_batches" [routerLink]="['/batch-summary', batch.id]">
+              <mat-icon mat-list-icon>check_circle_outline</mat-icon>
+              <div mat-line><p class="midnightblue">{{batch.id}} - {{batch.product_name}} * {{batch.plan_amount}}件</p></div>
+              <div mat-line> 开工时间：{{batch.start | date}} </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="row-container" fxLayout="column" fxLayoutAlign="start none">
+      <mat-card class="column mat-elevation-z8">
+        <mat-card-title> 库存预警 </mat-card-title>
+        <br>
+        <mat-card-content>
+          <ul>
+            <li *ngFor="let compo of displayCompos" class="clickable" [routerLink]="['/stock/warn', compo.id]">
+              <p class="mat-h3 info">
+                {{compo.name}}({{compo.id}}) | 现有 {{getTotalStock(compo)}} | 警戒线 {{compo.warn_stock}}
+              </p>
+            </li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="column mat-elevation-z8">
+        <mat-card-title> 近期操作 </mat-card-title>
+        <br>
+
+        <mat-card-content>
+          <ul>
+            <li *ngFor="let operation of operations">
+              <p class="mat-h3 info">
+                {{operation.operator}} 执行 <{{operation.content}}> 于 {{operation.execute_time}}</p>
+            </li>
+          </ul>
+
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<h2 mat-dialog-title> 采购单 {{data.instock_form_id}} </h2>
+<div *ngIf="!!instock_form" mat-dialog-content class="button-container" fxLayout="column warp" fxLayoutGap="10px">
+  <p class="bullet-point">供方编号：{{instock_form.vendor_id.toString().padStart(3, '0')}}</p>
+  <p class="bullet-point">供方名称：{{instock_form.vendor.company}}</p>
+  <p class="bullet-point">供方联系人：{{instock_form.vendor.name}}</p>
+  <p class="bullet-point">供方联系人电话：{{instock_form.vendor.contact}}</p>
+  <p class="bullet-point">供方传真：{{instock_form.vendor.fax}}</p>
+  <p class="bullet-point">供方电邮：{{instock_form.vendor.email}}</p>
+</div>
+<div mat-dialog-content style="height: 100%; width: 100%;">
+  <ag-grid-angular
+    style="width: 100%; height: 100%"
+    class="ag-theme-material"
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+    (firstDataRendered)="autoSizeAll(false)"
+    [columnDefs]="ColumnDefs"
+    [defaultColDef]="defaultColDef"
+    [animateRows]="true"
+    [localeText]="localeText"
+    [rowGroupPanelShow]="'always'"
+  >
+  </ag-grid-angular>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-stroked-button (click)="onCompleteClick()">返回</button>
+</div>

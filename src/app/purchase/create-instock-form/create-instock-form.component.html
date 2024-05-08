@@ -1,0 +1,77 @@
+<p class="mat-h2" style="margin-left: auto; margin-right: auto; padding: 20px">创建新采购单</p>
+<div class="body-container" fxLayout="row" fxLayoutAlign="space-around stretch">
+  <mat-card appearance="outlined" fxFlex="30">
+    <mat-card-title>
+      <p style="padding: 2rem">添加采购内容</p>
+    </mat-card-title>
+    <mat-card-content>
+      <form fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="itemGroup">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>供应商</mat-label>
+          <input type="text" matInput [formControl]="vendorSelected" [matAutocomplete]="autoVendor">
+          <mat-autocomplete #autoVendor="matAutocomplete" [displayWith]="vendorService.vendorDisplayFn">
+            <mat-option *ngFor="let vendor of this.vendorOptions | async" [value]="vendor">
+              {{vendor.name}} | {{vendor.company}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>采购物料</mat-label>
+            <input type="text" matInput [formControl]="specSelected" [matAutocomplete]="autoSpec">
+            <mat-autocomplete #autoSpec="matAutocomplete" [displayWith]="specDisplayFn" >
+              <mat-option *ngFor="let spec of this.specOption | async" [value]="spec">
+                {{spec.component_name}}（{{spec.id}}）
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="thin">
+            <mat-label>采购数量</mat-label>
+            <input matInput type=number formControlName="order_quantity">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="thin">
+            <mat-label>采购单价</mat-label>
+            <input matInput type=number formControlName="unit_cost" class="datepicker-input">
+          </mat-form-field>
+          <p class="info" *ngIf="specSelected.value">根据物料信息，此处使用了{{specSelected.value.use_net ? '税前价' : '含税价'}}</p>
+          <div class="vertical-isolated">
+            <label>到货时间：</label>
+            <input type="date" formControlName="instock_date">
+          </div>
+          <mat-form-field appearance="outline" class="thin">
+            <mat-label>备注</mat-label>
+            <input matInput type=text formControlName="notice">
+          </mat-form-field>
+          <button class="call" (click)="onConfirmAddItem()" [disabled]="itemGroup.invalid || specSelected.invalid || vendorSelected.invalid">添加</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card appearance="outlined" fxFlex="65">
+    <mat-card-title>
+      <p style="padding: 2rem">已添加采购内容</p>
+    </mat-card-title>
+    <mat-card-content>
+      <mat-list #items *ngFor="let v of vendorsInvolved">
+        <p class="main-content highlight" style="padding: 0.5rem; font-size: 24px"> {{v.company}} </p>
+        <mat-list-item *ngFor="let item of filterItemsByVendorId(v.id)">
+          <div class="isolated" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10">
+            <p class="record">{{item.name}}（{{item.specification_id}}） * </p>
+            <input type="number" step="1" [(ngModel)]="item.order_quantity">
+            <p>{{item.as_unit}} | 单价：{{item.unit_cost}}｜到货：</p>
+            <input type="date" [(ngModel)]="item.instock_date">
+            <button (click)="copyItem(item)">复制</button>
+            <button class="warn" (click)="removeItem(item)">删除</button>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions fxLayout="row" fxLayoutAlign="end center">
+      <button *ngIf="countDownloadedExcel == 0 ; else downloadTemplate" class="action" (click)="onSubmit()" [disabled]="instockItems.length === 0">确认提交所有采购内容</button>
+      <p *ngIf="filesLoading"> 正在生成文件... </p>
+      <ng-template #downloadTemplate>
+        <mat-progress-bar mode="determinate" value="{{100*countDownloadedExcel/vendorsInvolved.size}}"></mat-progress-bar>
+        <p class="vertical-isolated info">采购单总数：{{vendorsInvolved.size}} | 已下载：{{countDownloadedExcel}}</p>
+        <button class="view" (click)="goToInstockItemView()">完成（返回配件视图）</button>
+      </ng-template>
+    </mat-card-actions>
+  </mat-card>
+</div>

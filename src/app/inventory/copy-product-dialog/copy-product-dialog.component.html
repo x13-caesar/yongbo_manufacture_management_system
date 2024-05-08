@@ -1,0 +1,18 @@
+<div mat-dialog-title>
+  <p class="mat-title">复制产品</p>
+  <p class="mat-title promise piece"> 拷贝的原产品序列号为：{{data.product.id}}</p>
+</div>
+
+<div mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <mat-label>产品序列号</mat-label>
+    <input matInput [formControl]="new_id">
+  </mat-form-field>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [disabled]="!new_id.valid" (click)="onDetailInfoEdit()">继续编辑其他信息</button>
+  <button mat-raised-button color="primary" [disabled]="!new_id.valid" (click)="onProductCopyConfirm()">直接提交</button>
+  <button mat-button color="warn" (click)="dialogRef.close()">取消</button>
+</div>

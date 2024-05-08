@@ -1,0 +1,20 @@
+<h2 mat-dialog-title> 采购单 ｜ 入库记录 </h2>
+<div mat-dialog-content class="body-container">
+  <ag-grid-angular
+    style="width: 100%; height: 100%"
+    class="ag-theme-material"
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+    (firstDataRendered)="autoSizeAll(false)"
+    [columnDefs]="ColumnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowSelection]="'multiple'"
+    [animateRows]="true"
+    [localeText]="localeText"
+    [rowGroupPanelShow]="'always'"
+    [rowClassRules]="rowClassRules"
+    [alwaysShowHorizontalScroll]="true"
+    [alwaysShowVerticalScroll]="true"
+  >
+  </ag-grid-angular>
+</div>

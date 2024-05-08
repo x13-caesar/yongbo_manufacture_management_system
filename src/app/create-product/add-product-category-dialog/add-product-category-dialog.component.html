@@ -1,0 +1,17 @@
+<div mat-dialog-title>
+  <p class="mat-h3">添加新产品分类</p>
+</div>
+
+<div mat-dialog-content fxLayout="column" fxLayoutAlign="space-around center" >
+  <mat-form-field appearance="outline">
+    <mat-label>分类名</mat-label>
+    <input matInput [formControl]="category">
+    <mat-error *ngIf="category.errors?.existing"> 分类已存在 </mat-error>
+  </mat-form-field>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onSubmit()" cdkFocusInitial>确认提交</button>
+  <button mat-stroked-button color="warn" (click)="dialogRef.close()">取消</button>
+</div>

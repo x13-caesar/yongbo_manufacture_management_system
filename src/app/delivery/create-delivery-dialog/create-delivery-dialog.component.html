@@ -1,0 +1,73 @@
+<div mat-dialog-title>
+  <p class="mat-h3">发起交付</p>
+  <p class="mat-h3 info" *ngIf="data.product">{{data.product.name}}</p>
+
+</div>
+
+<div mat-dialog-content class="fullfill" fxLayout="column" fxLayoutAlign="space-between center" >
+  <form fxLayout="column" fxLayoutAlign="space-around start" [formGroup]="deliveryGroup">
+<!--    <mat-form-field appearance="outline" *ngIf="!data.product">-->
+<!--      <mat-label>客户</mat-label>-->
+<!--      <input matInput formControlName="product_id" [matAutocomplete]="prodAuto">-->
+<!--      <mat-autocomplete #prodAuto="matAutocomplete" [displayWith]="productService.productDisplayFn">-->
+<!--        <mat-option *ngFor="let prod of this.productOptions | async" [value]="prod">-->
+<!--          {{prod.name}} | {{prod.id}}-->
+<!--        </mat-option>-->
+<!--      </mat-autocomplete>-->
+<!--    </mat-form-field>-->
+
+    <mat-form-field appearance="outline">
+      <mat-label>客户</mat-label>
+      <input matInput formControlName="buyer_id" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="buyerDisplayFn">
+        <mat-option *ngFor="let buyer of this.buyerOptions | async" [value]="buyer">
+          {{buyer.company}} | {{buyer.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>交付日期</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="deliver_date">
+      <mat-datepicker-toggle matSuffix [for]="picker">
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>交付数量</mat-label>
+      <input type="number" matInput formControlName="amount">
+      <mat-error *ngIf="deliveryGroup.controls['amount'].value < 0">交付数量必须大于0</mat-error>
+      <mat-error *ngIf="deliveryGroup.controls['amount'].value > data.product.inventory">交付数量不能超过产品库存</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>客户订单号</mat-label>
+      <input type="text" matInput formControlName="order_id">
+      <mat-hint>如无相关订单，请留空</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>交付单价</mat-label>
+      <input type="number" matInput formControlName="unit_price">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>本次交付总价</mat-label>
+      <input type="number" matInput [formControl]="totalPrice">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>备注</mat-label>
+      <textarea matInput formControlName="notice"></textarea>
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onDeliveryConfirm(deliveryGroup)" [disabled]="!deliveryGroup.valid">确认提交</button>
+  <button mat-button (click)="onNoClick()">结束</button>
+</div>

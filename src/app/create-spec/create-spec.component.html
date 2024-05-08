@@ -1,0 +1,215 @@
+<div>
+  <div class="sub-header">
+    <p class="mat-title">创建配件</p>
+  </div>
+  <div class="body-container" fxLayout="row" fxLayoutAlign="space-around start">
+    <mat-card>
+      <mat-card-header>
+        <div class="vertical-isolated" fxLayout="row" fxLayoutAlign="space-between start">
+          <mat-card-title fxFlex="40"> 新配件（母类） </mat-card-title>
+          <button class="next" (click)="showCreateSpec=true" fxFlex="60"> 为已存在配件添加子类（规格）<mat-icon>open_in_new</mat-icon> </button>
+        </div>
+
+      </mat-card-header>
+      <mat-card-content>
+<!--        <div class="button-container clearfix" fxLayout="row" fxLayoutAlign="center center" >-->
+<!--          <button class="chip"> 查看编码规则 </button>-->
+<!--          <button class="call" (click)="showCreateSpec=true"> 为已存在配件添加子类（规格）<mat-icon>open_in_new</mat-icon> </button>-->
+<!--        </div>-->
+        <form fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="compoGroup" (ngSubmit)="onCompoSubmit(compoGroup)" (keydown.enter)="$event.preventDefault()">
+          <mat-form-field appearance="outline">
+            <mat-label>配件名称</mat-label>
+            <input matInput formControlName="name">
+            <mat-hint align="end">可以与其他产品重复</mat-hint>
+          </mat-form-field>
+<!--          <mat-form-field appearance="outline">-->
+<!--            <mat-label>分类</mat-label>-->
+<!--            <input matInput formControlName="category">-->
+<!--          </mat-form-field>-->
+          <mat-form-field appearance="outline">
+            <mat-label>分类</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let c of compoCategories" [value]="c.category" >
+                {{c.category}}
+              </mat-option>
+            </mat-select>
+            <input matInput >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>配件编码</mat-label>
+            <input type="text" matInput id="id" formControlName="id">
+            <mat-error *ngIf="compoGroup.controls['id'].errors?.existing"> 编码已存在 </mat-error>
+            <mat-hint align="end">请遵循既定编码规则</mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>规格</mat-label>
+            <input matInput type="text" formControlName="model">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>配件描述</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>保存期限</mat-label>
+            <input matInput type="text" placeholder="（天）" formControlName="expiration">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>库存单位</mat-label>
+            <input matInput type="text" placeholder="（天）" formControlName="as_unit">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>单位重量</mat-label>
+            <input matInput type="text" placeholder="（克）" formControlName="unit_weight">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>常规补货周期</mat-label>
+            <input matInput type="text" formControlName="fill_period">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>警示库存</mat-label>
+            <input matInput type="number" formControlName="warn_stock">
+            <mat-hint align="end">默认值为1000</mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>备注</mat-label>
+            <!--          <input matInput formControlName="notice">-->
+            <textarea matInput formControlName="notice"></textarea>
+          </mat-form-field>
+          <div class="button-container">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!compoGroup.valid">确认添加配件（母类）</button>
+          </div>
+        </form>
+        <br>
+        <mat-divider [inset]="true"></mat-divider>
+        <div class="isolated side-super-distance clearfix">
+          <div fxLayout="column" fxLayoutAlign="start center" >
+            <p class="mat-h3 subtitle">配件（母类）图片</p>
+            <p class="detail">可以在此处上传（需要先输入配件编码），也可以先提交，稍后再上传图片。</p>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center" >
+            <div><label for="file-compo">请选择文件  </label>
+              <input type="file"
+                     class="file-input"
+                     id="file-compo"
+                     (change)="handleFileInput($event)" #fileUpload></div>
+            <button mat-raised-button
+                    color="secondary"
+                    class="upload-btn"
+                    [disabled]="!fileToUpload || !compoGroup.controls['id'].value"
+                    (click)="onClickUploadCompoPicture()">上传</button>
+            <div *ngIf="uploadStatus==='uploading'; else uploadResultTemplate"><mat-spinner></mat-spinner></div>
+            <ng-template #uploadResultTemplate>
+              <mat-icon color="primary" *ngIf="uploadStatus==='success'">done</mat-icon>
+              <mat-icon color="warning" *ngIf="uploadStatus==='fail'">error</mat-icon>
+            </ng-template>
+
+
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="showCreateSpec">
+      <mat-card-header>
+        <mat-card-title> 添加新子类（规格） </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="button-container clearfix" fxLayout="row" fxLayoutAlign="space-around center">
+          <button mat-raised-button color="secondary" [routerLink]="'/vendors'"> 查看可选供应商<mat-icon>store</mat-icon> </button>
+          <button mat-raised-button color="primary" (click)="openCreateVendorDialog()"> 添加新供应商<mat-icon>store</mat-icon> </button>
+        </div>
+        <form fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="specGroup">
+          <mat-form-field appearance="outline">
+            <mat-label>对应配件母类</mat-label>
+            <input type="text" matInput [formControl]="selectedCompo" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="compoService.compoDisplayFn">
+              <mat-option *ngFor="let compo of this.compoOptions | async" [value]="compo">
+                {{compo.name}} | {{compo.id}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>供应商</mat-label>
+            <input type="text" matInput [formControl]="selectedVendor" [matAutocomplete]="autoBeta">
+            <mat-autocomplete #autoBeta="matAutocomplete" [displayWith]="vendorService.vendorDisplayFn">
+              <mat-option *ngFor="let vendor of this.vendorOptions | async" [value]="vendor">
+                {{vendor.name}} | {{vendor.company}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="nty-percent-fill">
+            <mat-form-field appearance="outline" fxFlex="80">
+              <mat-label>规格编码</mat-label>
+              <input matInput type="text" formControlName="id">
+              <mat-error *ngIf="specGroup.controls['id'].errors?.existing"> 编码已存在 </mat-error>
+            </mat-form-field>
+            <button mat-stroked-button class="call" fxFlex="20" (click)="generateSpecId()">生成</button>
+          </div>
+
+          <div class="nty-percent-fill" fxLayout="row" fxLayoutAlign="space-between none">
+            <mat-form-field appearance="outline" fxFlex="30">
+              <mat-label>税前价格</mat-label>
+              <input matInput type="number" step="0.01" formControlName="net_price">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="30">
+              <mat-label>含税价格</mat-label>
+              <input matInput type="number" step="0.01" formControlName="gross_price">
+            </mat-form-field>
+            <mat-checkbox formControlName="use_net" fxFlex="30">采购使用税前价格（{{specGroup.controls['net_price'].value}}）</mat-checkbox>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>初始库存</mat-label>
+            <input matInput type="number" formControlName="stock">
+            <mat-hint align="end">默认值为0</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>包装数量</mat-label>
+            <input matInput type="number" formControlName="unit_amount">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>采购备注</mat-label>
+            <textarea matInput formControlName="notice"></textarea>
+          </mat-form-field>
+
+          <div class="button-container">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!specGroup.valid" (click)="onSpecSubmit(specGroup)">确认添加</button>
+          </div>
+        </form>
+        <mat-divider [inset]="true"></mat-divider>
+        <div class="isolated side-super-distance clearfix">
+          <div fxLayout="column" fxLayoutAlign="start center" >
+            <p class="mat-h3 subtitle">规格（子类）图片</p>
+            <p class="detail">可以在此处上传（需要先输入规格编码），也可以先提交，稍后再上传图片。</p>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="start center" >
+            <div><label for="file-spec">请选择文件  </label>
+              <input type="file"
+                     class="file-input"
+                     id="file-spec"
+                     (change)="handleFileInput($event)" #fileUpload></div>
+            <button mat-raised-button
+                    color="secondary"
+                    class="upload-btn"
+                    [disabled]="!fileToUpload || !specGroup.controls['id'].value"
+                    (click)="onClickUploadSpecPicture()">上传</button>
+            <div *ngIf="uploadStatus==='uploading'; else uploadResultTemplate"><mat-spinner></mat-spinner></div>
+            <ng-template #uploadResultTemplate>
+              <mat-icon color="primary" *ngIf="uploadStatus==='success'">done</mat-icon>
+              <mat-icon color="warning" *ngIf="uploadStatus==='fail'">error</mat-icon>
+            </ng-template>
+
+
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+</div>

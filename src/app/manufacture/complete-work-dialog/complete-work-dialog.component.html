@@ -1,0 +1,33 @@
+<div mat-dialog-title>
+  <p class="mat-h3">确认完成</p>
+</div>
+
+<div mat-dialog-content>
+<!--  <label id="example-radio-group-label">酬劳计算方式</label>-->
+<!--  <mat-radio-group [formControl]="methodCtrl">-->
+<!--    <mat-radio-button class="example-radio-button" *ngFor="let m of methods" [value]="m.method">-->
+<!--      {{m.display}}-->
+<!--    </mat-radio-button>-->
+<!--  </mat-radio-group>-->
+  <mat-slide-toggle [(ngModel)]="isByHour"> 计时工单 </mat-slide-toggle>
+
+  <form [formGroup]="workCompleteGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>实际完成件数</mat-label>
+      <input type="number" matInput formControlName="complete_unit">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="isByHour">
+      <mat-label>工作小时</mat-label>
+      <input type="number" matInput formControlName="complete_hour">
+      <mat-hint>只有按小时计酬时需要填写，否则请留空</mat-hint>
+    </mat-form-field>
+  </form>
+
+</div>
+
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">取消</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()">确认完成</button>
+</div>
